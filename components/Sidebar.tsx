@@ -52,9 +52,14 @@ const AppSidebar = ({
         <SidebarMenuButton
           className="flex items-center gap-4 p-6"
           aria-label="Go to home"
+          asChild
         >
-          <Image src="/logo.png" alt="logo" width={34} height={34} />
-          <span className="text-base font-semibold">Barangay E-Governance</span>
+          <Link href="/dashboard">
+            <Image src="/logo.png" alt="logo" width={34} height={34} />
+            <span className="text-base font-semibold">
+              Barangay E-Governance
+            </span>
+          </Link>
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent className="my-3">
