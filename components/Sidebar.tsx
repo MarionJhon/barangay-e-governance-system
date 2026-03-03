@@ -25,7 +25,7 @@ const AppSidebar = ({
   currentPath: string;
 }) => {
   const navigation = [
-    { name: "Dashboard", href: "/", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     {
       name: "Custodian of Record",
       href: "/custodian-of-record",
