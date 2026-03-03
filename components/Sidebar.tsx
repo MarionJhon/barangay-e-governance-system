@@ -79,10 +79,10 @@ const AppSidebar = ({
                   isActive={isActive}
                   asChild
                 >
-                  <a href={nav.href}>
+                  <Link href={nav.href}>
                     <IconComponent className="size-5! shrink-0" />
                     <span className="text-sm">{nav.name}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             );
