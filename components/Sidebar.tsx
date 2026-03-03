@@ -25,7 +25,7 @@ const AppSidebar = ({
   currentPath: string;
 }) => {
   const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { name: "Dashboard", href: "/", icon: LayoutDashboard },
     {
       name: "Custodian of Record",
       href: "/custodian-of-record",
@@ -37,8 +37,12 @@ const AppSidebar = ({
       href: "/SSR",
       icon: SquaresSubtract,
     },
-    { name: "SK", href: "/sangguniang-kabataan", icon: GraduationCap },
-    { name: "BHW", href: "/bhw", icon: Hospital },
+    {
+      name: "Sangguniang Kabataan",
+      href: "/sangguniang-kabataan",
+      icon: GraduationCap,
+    },
+    { name: "Barangay Health Worker", href: "/bhw", icon: Hospital },
     {
       name: "Katarungang Pambarangay",
       href: "/katarungang-pambarangay",
@@ -47,41 +51,37 @@ const AppSidebar = ({
     { name: "Disaster & Safety", href: "/disaster-safety", icon: Siren },
   ];
   return (
-    <Sidebar className="bg-white dark:bg-black w-80">
+    <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarMenuButton
-          className="flex items-center gap-4 p-6"
-          aria-label="Go to home"
-          asChild
-        >
+        <SidebarMenuButton size="lg" aria-label="Go to home" asChild>
           <Link href="/dashboard">
-            <Image src="/logo.png" alt="logo" width={34} height={34} />
-            <span className="text-base font-semibold">
-              Barangay E-Governance
-            </span>
+            <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-sidebar-primary-foreground">
+              <Image src="/logo.png" alt="logo" width={34} height={34} />
+            </div>
+            <div className="flex-1 text-left text-base leading-tight">
+              <span className="truncate font-medium">
+                Barangay E-Governance
+              </span>
+            </div>
           </Link>
         </SidebarMenuButton>
       </SidebarHeader>
-      <SidebarContent className="my-3">
-        <SidebarMenu className="px-3 space-y-1">
+      <SidebarContent>
+        <SidebarMenu className="px-[0.3rem]">
           {navigation.map((nav, idx) => {
             const IconComponent = nav.icon;
             const isActive = currentPath === nav.href;
             return (
               <SidebarMenuItem key={idx}>
                 <SidebarMenuButton
-                  className={`flex py-6 ${
-                    isActive
-                      ? "bg-primary text-accent font-semibold"
-                      : "hover:bg-primary-foreground text-accent-foreground "
-                  }`}
+                  className="flex items-center space-x-3 py-2 px-3 h-12 data-[state=collapsed]:justify-center"
+                  tooltip={nav.name}
+                  isActive={isActive}
                   asChild
                 >
                   <Link href={nav.href}>
-                    <IconComponent
-                      style={{ width: "1.25rem", height: "1.25rem" }}
-                    />
-                    <span style={{ fontSize: "0.875rem" }}>{nav.name}</span>
+                    <IconComponent className="size-5! shrink-0" />
+                    <span className="text-sm">{nav.name}</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
