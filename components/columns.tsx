@@ -10,9 +10,15 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { FileUser, MoreHorizontal , UserRoundPen } from "lucide-react";
+import {
+  FileUser,
+  MoreHorizontal,
+  UserRoundPen,
+  UserRoundPlus,
+} from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import DeleteDialog from "./DeleteDialog";
+import CreateAccountDialog from "./resident/create-account-dialog";
 
 export type ResidentTableType = {
   id: string;
@@ -64,7 +70,7 @@ export const columns: ColumnDef<ResidentTableType>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const resident = row.original;
 
       return (
         <DropdownMenu>
@@ -77,18 +83,19 @@ export const columns: ColumnDef<ResidentTableType>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(resident.id)}
               className="flex group focus:bg-sky-500/10 focus:text-sky-500 transition-colors duration-200"
             >
               <FileUser className="text-gray-700 group-focus:text-sky-500" />
               View Info
             </DropdownMenuItem>
+            <CreateAccountDialog resident={resident.fullName} />
             <DropdownMenuItem className="flex group focus:bg-amber-500/10 focus:text-amber-500 transition-colors duration-200">
               <UserRoundPen className="text-gray-700 group-focus:text-amber-500" />
               Update
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DeleteDialog id={row.original.id} />
+            <DeleteDialog id={resident.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       );

@@ -4,14 +4,9 @@ import {
   SidebarHeader,
   SidebarMenuButton,
   SidebarContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
 } from "../ui/sidebar";
 import {
-  ChevronRight,
+  CircleStar,
   GraduationCap,
   HandCoins,
   Hospital,
@@ -23,20 +18,20 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "../ui/collapsible";
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
+import NavButton from "./Navbar/nav-button";
+import NavCollapsible from "./Navbar/nav-collapsible";
+import * as React from "react";
 
-const AppSidebar = () => {
-  const pathname = usePathname();
-  const [openItems, setOpenItems] = useState<Set<number>>(new Set());
-
-  const navigation = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+const navData = {
+  navButton: [
+    { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
+    {
+      title: "Barangay Official",
+      url: "/barangay-official",
+      icon: CircleStar,
+    },
+  ],
+  navCollabsible: [
     {
       title: "Custodian of Record",
       url: "/custodian-of-record",
@@ -60,44 +55,30 @@ const AppSidebar = () => {
         },
       ],
     },
-    { name: "Financial", href: "/financial", icon: HandCoins },
+    { title: "Financial", url: "/financial", icon: HandCoins },
     {
-      name: "Social & Sectoral Records",
-      href: "/ssr",
+      title: "Social & Sectoral Records",
+      url: "/ssr",
       icon: SquaresSubtract,
     },
     {
-      name: "Sangguniang Kabataan",
-      href: "/sangguniang-kabataan",
+      title: "Sangguniang Kabataan",
+      url: "/sangguniang-kabataan",
       icon: GraduationCap,
     },
-    { name: "Barangay Health Worker", href: "/bhw", icon: Hospital },
+    { title: "Barangay Health Worker", url: "/bhw", icon: Hospital },
     {
-      name: "Katarungang Pambarangay",
-      href: "/katarungang-pambarangay",
+      title: "Katarungang Pambarangay",
+      url: "/katarungang-pambarangay",
       icon: Scale,
     },
-    { name: "Disaster & Safety", href: "/disaster-safety", icon: Siren },
-  ];
+    { title: "Disaster & Safety", url: "/disaster-safety", icon: Siren },
+  ],
+};
 
-  useEffect(() => {
-    const activeIndexes = navigation.reduce<number[]>((acc, nav, idx) => {
-      if (nav.items?.some((item) => item.url === pathname)) acc.push(idx);
-      return acc;
-    }, []);
-    setOpenItems(new Set(activeIndexes));
-  }, [pathname]);
-
-  function handleToggle(idx: number) {
-    setOpenItems((prev) => {
-      const next = new Set(prev);
-      next.has(idx) ? next.delete(idx) : next.add(idx);
-      return next;
-    });
-  }
-
+const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
   return (
-    <Sidebar collapsible="icon">
+    <Sidebar collapsible="icon" {...props}>
       <SidebarHeader className="bg-sidebar-accent">
         <SidebarMenuButton
           className="hover:bg-green-200/20"
@@ -118,56 +99,8 @@ const AppSidebar = () => {
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent className="pt-3">
-        <SidebarMenu className="px-[0.3rem]">
-          {navigation.map((nav, idx) => {
-            return (
-              <Collapsible
-                open={openItems.has(idx)}
-                key={idx}
-                asChild
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <CollapsibleTrigger asChild onClick={() => handleToggle(idx)}>
-                    <SidebarMenuButton tooltip={nav.title} className="h-12">
-                      {nav.icon && <nav.icon className="size-5! shrink-0" />}
-                      <span>{nav.title}</span>
-                      <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-                    </SidebarMenuButton>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {nav.items?.map((subItem, idx) => (
-                        <SidebarMenuSubItem key={idx}>
-                          <SidebarMenuSubButton
-                            asChild
-                            isActive={subItem.url === pathname}
-                            className="h-8"
-                          >
-                            <Link href={subItem.url}>
-                              <span>{subItem.title}</span>
-                            </Link>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                  {/* <SidebarMenuButton
-                    className="flex items-center space-x-3 py-2 px-3 h-12 data-[state=collapsed]:justify-center"
-                    tooltip={nav.name}
-                    isActive={isActive}
-                    asChild
-                  >
-                    <Link href={nav.href!}>
-                      <IconComponent className="size-5! shrink-0" />
-                      <span className="text-sm">{nav.name}</span>
-                    </Link>
-                  </SidebarMenuButton> */}
-                </SidebarMenuItem>
-              </Collapsible>
-            );
-          })}
-        </SidebarMenu>
+        <NavButton items={navData.navButton} />
+        <NavCollapsible items={navData.navCollabsible} />
       </SidebarContent>
     </Sidebar>
   );

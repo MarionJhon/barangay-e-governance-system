@@ -1,7 +1,7 @@
 "use client";
 import { usePathname } from "next/navigation";
 
-export type BreadcrumbItem = {
+export type BreadcrumbItemProps = {
   label: string;
   href: string;
   isLast: boolean;
@@ -31,7 +31,7 @@ function formatSegmentLabel(segment: string): string {
     .join(" ");
 }
 
-const useBreadcrumbs = (): BreadcrumbItem[] => {
+const useBreadcrumbs = (): BreadcrumbItemProps[] => {
   const pathname = usePathname();
 
   const segments: string[] = pathname.split("/").filter(Boolean);
@@ -41,7 +41,7 @@ const useBreadcrumbs = (): BreadcrumbItem[] => {
     (segment) => !hiddenSegments.includes(segment)
   );
 
-  return visibleSegments.map((segment: string, idx: number): BreadcrumbItem => {
+  return visibleSegments.map((segment: string, idx: number): BreadcrumbItemProps => {
     const sliced: string[] = segments.slice(0, segments.indexOf(segment) + 1);
     const href = mainRoutes[segment] ?? "/" + sliced.join("/");
     const label = routeLabels[segment] ?? formatSegmentLabel(segment);
