@@ -1,0 +1,92 @@
+"use server";
+import { cacheTag, revalidateTag } from "next/cache";
+import { createClient } from "../supabase/server";
+import { ResidentSource, ResidentType } from "../types/custodian-of-records";
+import { ResidentTableType } from "@/components/columns";
+
+export const addResidentInfo = async (residentInfo: ResidentType) => {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from("resident")
+    .insert({
+      ...residentInfo,
+      date_of_birth: residentInfo.date_of_birth
+        ? residentInfo.date_of_birth.toISOString().split("T")[0]
+        : null,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    console.log(error);
+    return { success: false, error: error.message };
+  }
+  revalidateTag("resident", "max");
+  return { success: true };
+};
+
+export const getResident = async (): Promise<ResidentSource[]> => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("resident")
+    .select(
+      `
+      id,
+      last_name,
+      first_name,
+      middle_name,
+      suffix,
+      sex_at_birth,
+      purok,
+      resident_status
+    `,
+    )
+    .order("last_name", { ascending: true });
+
+  if (error) {
+    console.log(error.message);
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+
+const mapResident = async (data: ResidentSource[]):Promise< ResidentTableType[]> => {
+  "use cache";
+  cacheTag("resident");
+
+  return data.map((item: ResidentSource) => ({
+    id: String(item.id),
+    fullName: [
+      `${item.last_name},`,
+      item.first_name,
+      item.middle_name ? item.middle_name.charAt(0).toUpperCase() + "." : "",
+      item.suffix ?? "",
+    ]
+      .filter(Boolean)
+      .join(" "),
+    sex: item.sex_at_birth,
+    purok: item.purok,
+    status: item.resident_status,
+  }));
+};
+
+export const fetchResident = async (): Promise<ResidentTableType[]> => {
+  const data = await getResident();
+
+  return mapResident(data);
+};
+
+export const deleteResident = async (id: string) => {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from("resident").delete().eq("id", id);
+
+  if (error) return { error: error.message };
+
+  revalidateTag("resident", "max");
+
+  return { error: null };
+};
