@@ -233,7 +233,7 @@ export const filteredNameJoin = async (
       .filter(Boolean)
       .join(" ");
 
-    return [{ position: official.position, fullname }]; // ✅ one object
+    return [{ position: official.position, fullname }];
   });
 };
 
