@@ -64,8 +64,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signUp = async () => {
     try {
       const {} = supabase.auth.admin.createUser({
-        email:
+        email: 
         password:
+        user_metadata: {
+          resident_id:
+          username:
+          role:
+        }
       })
     } catch (error) {
       
