@@ -19,22 +19,18 @@ const BarangayOfficialPage = () => {
       <SidebarInset>
         <Header />
         <main className="flex flex-1 flex-col gap-4 p-4">
-          <div className="flex-1 rounded-xl md:min-h-min">
-            <div className="flex justify-end">
-              <AddOfficialModal />
-            </div>
+          <div className="flex justify-end">
+            <AddOfficialModal />
           </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div className="aspect-video rounded-xl bg-muted/50 shadow-md py-2">
-              <div className="flex flex-col items-center justify-center mb-3">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-3">
+            <div className="h-102 rounded-xl bg-muted/50 shadow-md py-2">
+              <div className="flex flex-col mb-3 px-2 text-center">
                 <h1 className="text-lg font-semibold">Barangay Council</h1>
-                <p className="text-sm text-muted-foreground">
-                  List of{" "}
-                  <span className="font-semibold">Barangay Council</span>{" "}
-                  members and their respective positions.
+                <p className="flex pl-3 text-xs text-muted-foreground">
+                  List of Barangay Council
                 </p>
               </div>
-              <div className="px-5 bg-muted/50 rounded-xl">
+              <div className="px-5">
                 <div className="rounded-sm shadow-sm overflow-hidden border border-border">
                   <Suspense fallback={<SkeletonTable columns={2} rows={7} />}>
                     <OfficialList />
@@ -42,15 +38,14 @@ const BarangayOfficialPage = () => {
                 </div>
               </div>
             </div>
-            <div className="aspect-video rounded-xl bg-muted/50 shadow-md py-2">
-              <div className="flex flex-col items-center justify-center mb-3">
+            <div className="rounded-xl bg-muted/50 shadow-md py-2">
+              <div className="flex flex-col mb-3 px-2 text-center">
                 <h1 className="text-lg font-semibold">Sangguniang Kabataan</h1>
-                <p className="text-sm text-muted-foreground">
-                  List of <span className="font-semibold">SK</span> officials
-                  and their positions.
+                <p className="flex pl-3 text-xs text-muted-foreground">
+                  List of SK officials
                 </p>
               </div>
-              <div className="px-5 bg-muted/50 rounded-xl">
+              <div className="px-5">
                 <div className="rounded-sm shadow-sm overflow-hidden border border-border">
                   <Suspense fallback={<SkeletonTable columns={2} rows={7} />}>
                     <SKList />
@@ -58,18 +53,17 @@ const BarangayOfficialPage = () => {
                 </div>
               </div>
             </div>
-            <div className="aspect-video rounded-xl bg-muted/50 shadow-md py-2">
+            <div className="rounded-xl bg-muted/50 shadow-md py-2">
               {" "}
-              <div className="flex flex-col items-center justify-center mb-3">
+              <div className="flex flex-col mb-3 px-2 text-center">
                 <h1 className="text-lg font-semibold">
                   Barangay Health Worker
                 </h1>
-                <p className="text-sm text-muted-foreground">
-                  List of <span className="font-semibold">BHW</span> and their
-                  assigned roles.
+                <p className="flex pl-3 text-xs text-muted-foreground">
+                  List of BHW
                 </p>
               </div>
-              <div className="px-5 bg-muted/50 rounded-xl">
+              <div className="px-5">
                 <div className="rounded-sm shadow-sm overflow-hidden border border-border">
                   <Suspense fallback={<SkeletonTable columns={2} rows={7} />}>
                     <BHWList />
@@ -78,38 +72,40 @@ const BarangayOfficialPage = () => {
               </div>
             </div>
           </div>
-          <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-            <div className="grid auto-rows-min gap-4 md:grid-cols-2">
-              <div className="h-[38.3rem] w-[33.7rem] aspect-video rounded-xl bg-muted/50 shadow-md py-2">
-                <div className="flex flex-col items-center justify-center mb-3">
-                  <h1 className="text-lg font-semibold">Barangay Tanod</h1>
-                  <p className="text-sm text-muted-foreground">List of Barangay Tanod maintaining peace and security.</p>
-                </div>
-                <div className="px-5 bg-muted/50 rounded-xl">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+            <div className="h-[33.3rem] rounded-xl bg-muted/50 shadow-md py-2">
+              <div className="flex flex-col mb-3 px-2 text-center">
+                <h1 className="text-lg font-semibold">Barangay Tanod</h1>
+                <p className="flex pl-3 text-xs text-muted-foreground">
+                  List of Barangay Tanod
+                </p>
+              </div>
+              <div className="px-5">
                 <div className="rounded-sm shadow-sm overflow-hidden border border-border">
                   <Suspense fallback={<SkeletonTable columns={2} rows={10} />}>
                     <TanodList />
                   </Suspense>
                 </div>
               </div>
+            </div>
+            <div className="rounded-xl bg-muted/50 shadow-md py-2">
+              <div className="flex flex-col mb-3 px-2 text-center">
+                <h1 className="text-lg font-semibold">Barangay Lupon</h1>
+                <p className="flex pl-3 text-xs text-muted-foreground">
+                  List of the Lupon Tagapamayapa
+                </p>
               </div>
-              <div className="h-[38.3rem] w-[33.7rem] aspect-video rounded-xl bg-muted/50 shadow-md py-2">
-                <div className="flex flex-col items-center justify-center mb-3">
-                  <h1 className="text-lg font-semibold">Barangay Lupon</h1>
-                  <p className="text-sm text-muted-foreground">List of the Lupon Tagapamayapa responsible for community dispute mediation.</p>
-                </div>
-                <div className="px-5 bg-muted/50 rounded-xl">
+              <div className="px-5">
                 <div className="rounded-sm shadow-sm overflow-hidden border border-border">
                   <Suspense fallback={<SkeletonTable columns={2} rows={10} />}>
                     <LuponList />
                   </Suspense>
                 </div>
               </div>
-              </div>
             </div>
-            <div className=" aspect-video rounded-xl bg-muted/50 shadow-md"></div>
+            <div className="hidden xl:block rounded-xl bg-muted/50 shadow-md"></div>
           </div>
-          <div className="flex-1 rounded-xl bg-muted/50 md:min-h-min"></div>
+          {/* <div className="flex-1 rounded-xl bg-muted/50 md:min-h-min"></div> */}
         </main>
       </SidebarInset>
     </div>
