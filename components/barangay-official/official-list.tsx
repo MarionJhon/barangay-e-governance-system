@@ -68,7 +68,6 @@ export const BHWList = async () => {
       <TableHeader>
         <TableRow className="bg-rose-500/50 hover:bg-rose-500/50">
           <TableHead>Full Name</TableHead>
-          <TableHead>Position</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -87,7 +86,6 @@ export const BHWList = async () => {
             .map((item) => (
               <TableRow key={item.fullname}>
                 <TableCell>{item.fullname}</TableCell>
-                <TableCell>{item.position}</TableCell>
               </TableRow>
             ))
         )}
@@ -146,13 +144,13 @@ export const TanodList = async () => {
   const skTotalActive = data.filter((val) =>
     ["Tanod"].includes(val.position),
   ).length;
+  console.log(skTotalActive);
 
   return (
     <Table>
       <TableHeader>
         <TableRow className="bg-red-600/40 hover:bg-red-600/40">
           <TableHead>Full Name</TableHead>
-          <TableHead>Position</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -171,7 +169,6 @@ export const TanodList = async () => {
             .map((item) => (
               <TableRow key={item.fullname}>
                 <TableCell>{item.fullname}</TableCell>
-                <TableCell>{item.position}</TableCell>
               </TableRow>
             ))
         )}
@@ -192,7 +189,6 @@ export const LuponList = async () => {
       <TableHeader className="hover:bg-none">
         <TableRow className="bg-teal-600/40 hover:bg-teal-600/40">
           <TableHead>Full Name</TableHead>
-          <TableHead>Position</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -211,7 +207,6 @@ export const LuponList = async () => {
             .map((item) => (
               <TableRow key={item.fullname}>
                 <TableCell>{item.fullname}</TableCell>
-                <TableCell>{item.position}</TableCell>
               </TableRow>
             ))
         )}
