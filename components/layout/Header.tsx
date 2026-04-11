@@ -11,15 +11,44 @@ import {
 } from "../ui/breadcrumb";
 import { Button } from "../ui/button";
 import { BreadcrumbItemProps, useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useAuth } from "@/contexts/auth-context";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { toast } from "sonner";
 
 interface HeaderPageProps {
   breadcrumb: BreadcrumbItemProps[];
 }
 
 const HeaderPages = ({ breadcrumb }: HeaderPageProps) => {
+  const { user, signOut } = useAuth();
+  const router = useRouter();
+  async function handleSignOut() {
+    try {
+      const result = await signOut();
+      if (result?.error) {
+        toast.error(result.error ?? "Something went wrong", {
+          position: "top-right",
+        });
+      }
+
+      router.push("/");
+    } catch (error) {
+      toast.error("An unexpexted error occurred.", {
+        position: "top-right",
+      });
+    }
+  }
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
       <div className="flex w-full items-center gap-1 px-4 lg:gap-2 lg:px-6">
@@ -53,16 +82,24 @@ const HeaderPages = ({ breadcrumb }: HeaderPageProps) => {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="ml-auto flex items-center gap-2">
-          <Button variant="ghost" asChild size="sm" className="hidden sm:flex">
-            <a
-              href="https://github.com/shadcn-ui/ui/tree/main/apps/v4/app/(examples)/dashboard"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="dark:text-foreground"
-            >
-              GitHub
-            </a>
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size="icon" className="rounded-full">
+                {user?.email?.charAt(0).toUpperCase()}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuItem>Profile</DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut}>
+                Log out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
     </header>
@@ -73,7 +110,7 @@ const HeaderHomePage = () => {
   const pathname = usePathname();
 
   return (
-    <header className="flex h-16 justify-between shrink-0 px-10 items-center bg-white/80">
+    <header className="flex h-16 px-10 justify-between items-center bg-white/80">
       <div className="flex flex-1">
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -82,11 +119,13 @@ const HeaderHomePage = () => {
             width={30}
             height={30}
           />
-          <p className="font-medium text-sm">Barangay eGovernance System</p>
+          <p className="hidden md:block font-medium text-sm">
+            Barangay eGovernance System
+          </p>
         </Link>
       </div>
 
-      <div className="flex items-center backdrop-blur-md bg-white/10 border border-white/20 rounded-full px-2 shadow-[0_0_15px_rgba(255,255,255,0.15)] ring-1 ring-white/10">
+      <div className="hidden md:flex items-center rounded-full px-2">
         <Button variant="ghost" className="rounded-full">
           Home
         </Button>
