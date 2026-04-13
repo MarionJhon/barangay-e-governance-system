@@ -40,6 +40,7 @@ const HeaderPages = ({ breadcrumb }: HeaderPageProps) => {
         toast.error(result.error ?? "Something went wrong", {
           position: "top-right",
         });
+        return;
       }
 
       router.push("/");
