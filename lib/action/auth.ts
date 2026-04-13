@@ -11,15 +11,15 @@ export const signUp = async (formValues: SignUpType, residentId: string) => {
     } = await supabaseAdmin.auth.getUser();
     const callerRole = user?.app_metadata?.role;
 
-    if (authError || !user || !["admind", "Secretary"].includes(callerRole)){
-      return {success: false, error: "Unauthorized User"}
+    if (authError || !user || !["admin", "secretary"].includes(callerRole)) {
+      return { success: false, error: "Unauthorized User" };
     }
 
-      const { data: residentInfo, error: residentError } = await supabaseAdmin
-        .from("resident")
-        .select("id,email_address")
-        .eq("id", residentId)
-        .single();
+    const { data: residentInfo, error: residentError } = await supabaseAdmin
+      .from("resident")
+      .select("id,email_address")
+      .eq("id", residentId)
+      .single();
 
     if (residentError || !residentInfo) {
       return { success: false, error: "Resident not found" };
@@ -43,7 +43,7 @@ export const signUp = async (formValues: SignUpType, residentId: string) => {
       email_confirm: true,
       password: formValues.password,
       app_metadata: {
-        role: role?.position || "resident",
+        role: (role?.position ?? "resident").toLowerCase(),
       },
       user_metadata: {
         resident_id: residentId,
@@ -97,6 +97,6 @@ export const signOut = async () => {
     return { success: true };
   } catch (error) {
     console.error("Error signing out", error);
-    return { success: false, error: 'An unexpected error occurred' };
+    return { success: false, error: "An unexpected error occurred" };
   }
 };
