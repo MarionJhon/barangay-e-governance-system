@@ -89,7 +89,10 @@ export const columns: ColumnDef<ResidentTableType>[] = [
               <FileUser className="text-gray-700 group-focus:text-sky-500" />
               View Info
             </DropdownMenuItem>
-            <CreateAccountDialog resident={resident.fullName} />
+            <CreateAccountDialog
+              resident={resident.fullName}
+              residentId={resident.id}
+            />
             <DropdownMenuItem className="flex group focus:bg-amber-500/10 focus:text-amber-500 transition-colors duration-200">
               <UserRoundPen className="text-gray-700 group-focus:text-amber-500" />
               Update

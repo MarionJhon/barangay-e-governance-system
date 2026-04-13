@@ -144,7 +144,6 @@ export const TanodList = async () => {
   const skTotalActive = data.filter((val) =>
     ["Tanod"].includes(val.position),
   ).length;
-  console.log(skTotalActive);
 
   return (
     <Table>
