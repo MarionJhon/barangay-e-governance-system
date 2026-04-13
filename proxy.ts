@@ -4,7 +4,7 @@ import { createClient } from "./lib/supabase/server";
 
 const roleRoutes: Record<string, string[]> = {
   admin: ["/dashboard", "/barangay-official", "/custodian-of-record/resident"],
-  Secretary: [
+  secretary: [
     "/dashboard",
     "/barangay-official",
     "/custodian-of-record/resident",
@@ -34,7 +34,7 @@ export const proxy = async (request: NextRequest) => {
   }
 
   if (user) {
-    const role = user.user_metadata?.role as string;
+    const role = String(user.app_metadata?.role ?? "resident").toLowerCase();
 
     const allowedAccess = roleRoutes[role] ?? [];
 
