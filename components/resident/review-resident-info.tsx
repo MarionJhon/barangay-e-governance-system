@@ -38,8 +38,7 @@ const ReviewResidentInfo = ({
         <DialogTrigger asChild>
           <Button
             className="w-40 h-15 text-base font-semibold bg-blue-300/90"    
-            type="submit"
-            form="form-review"
+            type="button"
           >
             <ScanSearch className="w-10! h-6!" />{" "}
             <span className="-ml-3">Review</span>
@@ -84,7 +83,7 @@ const ReviewResidentInfo = ({
                     className="w-full text-center border-0 border-b border-gray-600 rounded-none shadow-none focus-visible:border-gray-600 focus-visible:ring-0 focus-visible:ring-transparent bg-transparent"
                   />
                   <FieldLabel
-                    htmlFor="firsname"
+                    htmlFor="firstname"
                     className="text-sm font-semibold"
                   >
                     First Name
