@@ -1,3 +1,4 @@
+'use client'
 import { useState } from "react";
 import { DropdownMenuItem } from "../ui/dropdown-menu";
 import { UserRoundPlus } from "lucide-react";
@@ -45,7 +46,7 @@ const CreateAccountDialog = ({
         toast.error(createAccount?.error ?? "Something went wrong.", {
           position: "top-right",
         });
-        return;
+        return; 
       }
 
       toast.success(`Account for ${resident} has been created successfully`, {
