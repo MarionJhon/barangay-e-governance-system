@@ -103,6 +103,8 @@ const CreateAccountDialog = ({
                   <FieldLabel>Password</FieldLabel>
                   <Input
                     {...field}
+                    type="password"
+                    autoComplete="new-password"
                     aria-invalid={fieldState.invalid}
                     className="h-12 border-2"
                   />
