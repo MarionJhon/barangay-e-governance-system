@@ -38,8 +38,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { addResidentInfo, updateResident } from "@/lib/action/resident";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { UpdateResidentProps } from "@/lib/types/custodian-of-records";
-import ReviewResidentInfo from "@/components/resident/review-resident-info";
+import { UpdateResidentType } from "@/lib/types/custodian-of-records";
 
 const UpdateResidentPage = () => {
   const [saving, setSaving] = useState<boolean>(false);
@@ -51,30 +50,30 @@ const UpdateResidentPage = () => {
 
     setSaving(true);
 
-    try {
-      if (!reviewData) return;
-      const result = await updateResident(reviewData);
-      if (result.success) {
-        toast.success("resident info successfully added!", {
-          position: "top-right",
-        });
-        router.back();
-        form.reset();
-      } else {
-        toast.error(result.error || "Failed to add resident", {
-          position: "top-right",
-        });
-      }
-    } catch (error) {
-      toast.error("Failed to add resident", {
-        position: "top-right",
-      });
-    } finally {
-      setSaving(false);
-    }
+    // try {
+    //   if (!reviewData) return;
+    //   const result = await updateResident(reviewData);
+    //   if (result.success) {
+    //     toast.success("resident info successfully added!", {
+    //       position: "top-right",
+    //     });
+    //     router.back();
+    //     form.reset();
+    //   } else {
+    //     toast.error(result.error || "Failed to add resident", {
+    //       position: "top-right",
+    //     });
+    //   }
+    // } catch (error) {
+    //   toast.error("Failed to add resident", {
+    //     position: "top-right",
+    //   });
+    // } finally {
+    //   setSaving(false);
+    // }
   };
 
-  const form = useForm<UpdateResidentProps>({
+  const form = useForm<UpdateResidentType>({
     resolver: zodResolver(residentSchema) as any,
     defaultValues: { ...residentDefaultValue },
   });
@@ -87,7 +86,7 @@ const UpdateResidentPage = () => {
         <Header />
         <div className="flex flex-1 grid-cols-2 gap-4 p-4">
           <div className="flex-1">
-            <form onSubmit={form.handleSubmit(onSubmit)} id="form-review">
+            <form id="form-review">
               <FieldGroup>
                 <div className="flex flex-col gap-4">
                   <div className="grid md:grid-cols-2 gap-4">
