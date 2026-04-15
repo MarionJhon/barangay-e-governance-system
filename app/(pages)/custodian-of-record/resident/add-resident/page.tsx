@@ -55,7 +55,7 @@ const AddResidentPage = () => {
 
   const router = useRouter();
 
-  const onSubmit = async (e: React.SubmitEvent) => {
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setSaving(true);
