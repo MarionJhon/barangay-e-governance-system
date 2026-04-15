@@ -4,6 +4,7 @@ import { AuthContextType } from "@/lib/types/auth.type";
 import { User } from "@supabase/supabase-js";
 import { signUp, signIn, signOut } from "@/lib/action/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { sub } from "date-fns";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -13,6 +14,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const supabase = createClient();
 
   useEffect(() => {
+    let subscription: { unsubscribe: () => void } | null = null;
+
     const checkUser = async () => {
       setLoading(true);
       try {
@@ -24,12 +27,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         console.log(session?.user);
 
         const {
-          data: { subscription },
+          data: { subscription: sub },
         } = supabase.auth.onAuthStateChange(async (_event, session) => {
           setUser(session?.user ?? null);
         });
 
-        return () => subscription?.unsubscribe();
+        subscription = sub;
       } catch (error) {
         console.error(error);
       } finally {
@@ -37,7 +40,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
     };
 
-    checkUser();  
+    checkUser();
+
+    return () => {
+      subscription?.unsubscribe();
+    };
   }, []);
 
   return (
