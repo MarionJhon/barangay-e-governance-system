@@ -7,6 +7,14 @@ import { ResidentTableType } from "@/components/columns";
 export const addResidentInfo = async (residentInfo: ResidentType) => {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "User not authenticated." };
+  }
+
   const { error } = await supabase
     .from("resident")
     .insert({
@@ -29,6 +37,14 @@ export const addResidentInfo = async (residentInfo: ResidentType) => {
 export const getResident = async (): Promise<ResidentSource[]> => {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
   const { data, error } = await supabase
     .from("resident")
     .select(
@@ -46,17 +62,13 @@ export const getResident = async (): Promise<ResidentSource[]> => {
     .order("last_name", { ascending: true });
 
   if (error) {
-    console.log(error.message);
     throw new Error(error.message);
   }
 
   return data;
 };
 
-const mapResident = async (data: ResidentSource[]):Promise< ResidentTableType[]> => {
-  "use cache";
-  cacheTag("resident");
-
+const mapResident = (data: ResidentSource[]): ResidentTableType[] => {
   return data.map((item: ResidentSource) => ({
     id: String(item.id),
     fullName: [
@@ -79,8 +91,31 @@ export const fetchResident = async (): Promise<ResidentTableType[]> => {
   return mapResident(data);
 };
 
+export const updateResident = async (formData: FormData) => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if(!user) {
+    return {success: false, error: "User not authenticated."}
+  }
+
+  
+
+};
+
 export const deleteResident = async (id: string) => {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "User not authenticated." };
+  }
 
   const { error } = await supabase.from("resident").delete().eq("id", id);
 

@@ -130,7 +130,7 @@ const AddOfficialModal = () => {
 
     try {
       const result = await addBarangayOfficial(data);
-      console.log(result.error);
+      
       if (!result.success) {
         toast.error(result.error ?? "Something went wrong.", {
           position: "top-right",

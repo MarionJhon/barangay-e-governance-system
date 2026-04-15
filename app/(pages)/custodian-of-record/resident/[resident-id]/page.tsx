@@ -2,14 +2,7 @@
 import AppSidebar from "@/components/layout/Sidebar";
 import { SidebarInset } from "@/components/ui/sidebar";
 import Header from "@/components/layout/Header";
-import {
-  BookUser,
-  MapPinHouse,
-  Phone,
-  ScanSearch,
-  Sprout,
-  SquareChartGantt,
-} from "lucide-react";
+import { BookUser, MapPinHouse, Phone, Sprout } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Field,
@@ -42,27 +35,25 @@ import {
   residentDefaultValue,
 } from "@/lib/schema/custodian-of-record/residents.validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addResidentInfo } from "@/lib/action/resident";
+import { addResidentInfo, updateResident } from "@/lib/action/resident";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import { ResidentType } from "@/lib/types/custodian-of-records";
+import { UpdateResidentProps } from "@/lib/types/custodian-of-records";
 import ReviewResidentInfo from "@/components/resident/review-resident-info";
 
-const AddResidentPage = () => {
+const UpdateResidentPage = () => {
   const [saving, setSaving] = useState<boolean>(false);
-  const reviewRef = useRef<ResidentType | null>(null);
-  const [reviewData, setReviewData] = useState<ResidentType | null>(null);
 
   const router = useRouter();
 
-  const onSubmit = async (e: React.SubmitEvent) => {
+  const onSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setSaving(true);
 
     try {
       if (!reviewData) return;
-      const result = await addResidentInfo(reviewData);
+      const result = await updateResident(reviewData);
       if (result.success) {
         toast.success("resident info successfully added!", {
           position: "top-right",
@@ -83,23 +74,11 @@ const AddResidentPage = () => {
     }
   };
 
-  const form = useForm<ResidentType>({
+  const form = useForm<UpdateResidentProps>({
     resolver: zodResolver(residentSchema) as any,
     defaultValues: { ...residentDefaultValue },
   });
 
-  function onReview(values: ResidentType) {
-    reviewRef.current = values;
-    setReviewData(values); // populate review card
-    form.reset({ ...residentDefaultValue });
-  }
-
-  function onCancel() {
-    const saved = reviewRef.current;
-    reviewRef.current = null;
-    setReviewData(null);
-    form.reset({ ...saved }); //restores fields
-  }
 
   return (
     <div className="flex min-h-screen w-full bg-gray-400">
@@ -108,7 +87,7 @@ const AddResidentPage = () => {
         <Header />
         <div className="flex flex-1 grid-cols-2 gap-4 p-4">
           <div className="flex-1">
-            <form onSubmit={form.handleSubmit(onReview)} id="form-review">
+            <form onSubmit={form.handleSubmit(onSubmit)} id="form-review">
               <FieldGroup>
                 <div className="flex flex-col gap-4">
                   <div className="grid md:grid-cols-2 gap-4">
@@ -131,7 +110,6 @@ const AddResidentPage = () => {
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel htmlFor="last_name">
                                     Last Name{" "}
-                                    <span className="text-red-500">*</span>
                                   </FieldLabel>
                                   <Input
                                     {...field}
@@ -154,7 +132,6 @@ const AddResidentPage = () => {
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel htmlFor="first-name">
                                     First Name{" "}
-                                    <span className="text-red-500">*</span>
                                   </FieldLabel>
                                   <Input
                                     {...field}
@@ -225,7 +202,6 @@ const AddResidentPage = () => {
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor="date_of_birth">
                                   Date of Birth{" "}
-                                  <span className="text-red-500">*</span>
                                 </FieldLabel>
                                 <Popover>
                                   <PopoverTrigger asChild>
@@ -270,7 +246,6 @@ const AddResidentPage = () => {
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor="birth_place">
                                   Birth Place{" "}
-                                  <span className="text-red-500">*</span>
                                 </FieldLabel>
 
                                 <Input
@@ -296,7 +271,6 @@ const AddResidentPage = () => {
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel htmlFor="sex_at_birth">
                                     Sex of Birth{" "}
-                                    <span className="text-red-500">*</span>
                                   </FieldLabel>
                                   <Select
                                     name={field.name}
@@ -333,7 +307,6 @@ const AddResidentPage = () => {
                                 <Field data-invalid={fieldState.invalid}>
                                   <FieldLabel htmlFor="civil-status">
                                     Civil Status{" "}
-                                    <span className="text-red-500">*</span>
                                   </FieldLabel>
                                   <Select
                                     name={field.name}
@@ -435,7 +408,6 @@ const AddResidentPage = () => {
                               <Field data-invalid={fieldState.invalid}>
                                 <FieldLabel htmlFor="contact_number">
                                   Contact Number
-                                  <span className="text-red-500">*</span>
                                 </FieldLabel>
                                 <Input
                                   {...field}
@@ -767,14 +739,6 @@ const AddResidentPage = () => {
                 </div>
               </FieldGroup>
             </form>
-            <div className="pt-2 flex justify-end pr-2">
-              <ReviewResidentInfo
-                reviewData={reviewData}
-                onSubmit={onSubmit}
-                onCancel={onCancel}
-                saving={saving}
-              />
-            </div>
           </div>
         </div>
       </SidebarInset>
@@ -782,4 +746,4 @@ const AddResidentPage = () => {
   );
 };
 
-export default AddResidentPage;
+export default UpdateResidentPage;

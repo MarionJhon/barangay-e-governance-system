@@ -1,8 +1,8 @@
 "use client";
-import { SignInType } from "@/lib/schema/auth";
 import { createClient } from "@/lib/supabase/client";
 import { AuthContextType } from "@/lib/types/auth.type";
 import { User } from "@supabase/supabase-js";
+import { signUp, signIn, signOut } from "@/lib/action/auth";
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const supabase = createClient();
 
   useEffect(() => {
-    async function checkUser() {
+    const checkUser = async () => {
       setLoading(true);
       try {
         const {
@@ -29,56 +29,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           setUser(session?.user ?? null);
         });
 
-        return () => subscription.unsubscribe;
+        return () => subscription?.unsubscribe();
       } catch (error) {
         console.error(error);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    checkUser();
+    checkUser();  
   }, []);
 
-  const signIn = async (accountInfo: SignInType) => {
-    try {
-      const { data, error } =
-        await supabase.auth.signInWithPassword(accountInfo);
-
-      if (error) {
-        console.error("Supabase sign-in error: ", error.message);
-        return { success: false, error: error.message };
-      }
-
-      console.log("Supabase sign-in success:", data);
-      return { success: true, data };
-    } catch (error) {
-      console.error("Unexpected error during sign-in: ", error);
-      return {
-        success: false,
-        error: "An unexpected error occurred. Please try again",
-      };
-    }
-  };
-
-  const signUp = async () => {
-    try {
-      const {} = supabase.auth.admin.createUser({
-        email: 
-        password:
-        user_metadata: {
-          resident_id:
-          username:
-          role:
-        }
-      })
-    } catch (error) {
-      
-    }
-  }
-
   return (
-    <AuthContext.Provider value={{ user, loading, signIn }}>
+    <AuthContext.Provider value={{ user, loading, signIn, signUp, signOut }}>
       {children}
     </AuthContext.Provider>
   );

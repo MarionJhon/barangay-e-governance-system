@@ -23,7 +23,7 @@ const ReviewResidentInfo = ({
   saving,
 }: {
   reviewData: ResidentType | null;
-  onSubmit: (e: React.SubmitEvent) => Promise<void>;
+  onSubmit: (e: React.SubmitEvent<HTMLFormElement>) => Promise<void>;
   onCancel: () => void;
   saving: boolean;
 }) => {

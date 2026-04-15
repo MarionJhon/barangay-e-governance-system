@@ -16,6 +16,14 @@ import { cacheTag, revalidateTag } from "next/cache";
 export const getResidentList = async (): Promise<ResidentList[]> => {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
+
   const { data, error } = await supabase
     .from("resident")
     .select(`id,last_name,first_name,suffix,middle_name`);
@@ -31,7 +39,7 @@ export const getResidentList = async (): Promise<ResidentList[]> => {
 export const formattedName = async (
   data: ResidentList[],
 ): Promise<Pick<ResidentTableType, "id" | "fullName">[]> => {
-  "use cache"
+  "use cache";
   cacheTag("officials");
   return data.map((resident: ResidentList) => ({
     id: String(resident.id),
@@ -62,6 +70,15 @@ function formatDateOnly(date: Date): string {
 
 export async function addBarangayOfficial(data: OfficialType) {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { success: false, error: "User not authenticated." };
+  }
+
   const parsed = officialSchema.safeParse(data);
   if (!parsed.success) {
     return {
@@ -191,6 +208,14 @@ export async function addBarangayOfficial(data: OfficialType) {
 
 export const getOfficials = async () => {
   const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    throw new Error("User not authenticated.");
+  }
 
   const { data, error } = await supabase
     .from("barangay_officials")
