@@ -10,7 +10,6 @@ export const signUp = async (formValues: SignUpType, residentId: string) => {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser();
-
     const callerRole = user?.app_metadata?.role;
 
     if (authError || !user || !["admin", "secretary"].includes(callerRole)) {
