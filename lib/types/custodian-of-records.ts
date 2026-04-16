@@ -12,6 +12,12 @@ export interface ResidentSource {
   resident_status: string;
 }
 
+const updateResidentSchema = residentSchema
+  .partial()
+  .extend({ id: z.string() });
+
+export type UpdateResidentType = z.infer<typeof updateResidentSchema>;
+
 export type ResidentType = z.infer<typeof residentSchema>;
 
 export interface DeleteResidentDialogProps {

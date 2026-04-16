@@ -5,10 +5,11 @@ import { createClient } from "../supabase/server";
 
 export const signUp = async (formValues: SignUpType, residentId: string) => {
   try {
+    const supabase = await createClient();
     const {
       data: { user },
       error: authError,
-    } = await supabaseAdmin.auth.getUser();
+    } = await supabase.auth.getUser();
     const callerRole = user?.app_metadata?.role;
 
     if (authError || !user || !["admin", "secretary"].includes(callerRole)) {
